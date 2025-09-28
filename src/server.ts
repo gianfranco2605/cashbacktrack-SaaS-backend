@@ -8,7 +8,7 @@ import authRouter from './routes/authRouter'
 async function connectDB() {
     try {
         await db.authenticate();
-        db.sync()  // This will create tables and syncronice the models with the database
+        await db.sync()  // This will create tables and syncronice the models with the database
         console.log(colors.blue.bold('Database connected...'.cyan.underline));
         
     } catch (error) {
