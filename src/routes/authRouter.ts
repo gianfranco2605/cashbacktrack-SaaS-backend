@@ -1,10 +1,12 @@
 import { Router } from "express";
 import { AuthController } from '../controllers/AuthController'
 import { body } from "express-validator";
-import { handleInputErrors } from "../middleware/validation";
+import { handleInputErrors } from '../middleware/validation';
 import { limiter } from "../config/limiter";
 
 const router = Router();
+
+router.use(limiter);
 
 router.post('/create-account',
     body('name')
@@ -18,7 +20,6 @@ router.post('/create-account',
 );
 
 router.post('/confirm-account',
-    limiter,
     body('token')
     .notEmpty().withMessage('Token cant be empty')
     .isLength({ min:6, max:6}).withMessage('Token must be 6 characters'),
@@ -26,4 +27,12 @@ router.post('/confirm-account',
     AuthController.confirmAccount
 )
 
+router.post('/login',
+    body('email')
+    .isEmail().withMessage('E-mail not valid'),
+    body('password')
+    .notEmpty().withMessage('Password cant be empty'),
+    handleInputErrors,
+    AuthController.login
+)
 export default router;
