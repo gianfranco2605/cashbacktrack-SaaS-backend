@@ -26,4 +26,24 @@ export class AuthEmail {
             throw error;
         }
     }
+
+    static sendPasswordResetEmail = async (user: EmailType) => {
+        try {
+            const email = await transport.sendMail({
+                from: 'Cashtrackr <no-reply@cashtrackr.com>',
+                to: user.email,
+                subject: 'Cashtrackr - Reset your password',
+                html: `
+                    <h1>Reset your password: ${user.name}</h1>
+                    <p>Click ${user.token} <a href="#">here</a> to reset your password</p>
+                `                
+            }) 
+
+            console.log('Email sent:', email);
+            return email;
+        } catch (error) {
+            console.error('Error sending email:', error);
+            throw error;
+        }
+    }
 }
